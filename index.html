@@ -714,39 +714,6 @@
             flex-direction: row-reverse;
         }
 
-        .message-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--light-gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray);
-            font-size: 11px;
-            font-weight: 600;
-            overflow: hidden;
-            flex-shrink: 0;
-            position: relative;
-            margin-bottom: 2px;
-            border: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .message-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .message-content-wrapper {
-            display: flex;
-            flex-direction: column;
-            max-width: 100%;
-        }
-
         .message-content {
             padding: 8px 12px;
             border-radius: 18px;
@@ -756,23 +723,24 @@
             position: relative;
             max-width: 100%;
             word-break: break-word;
+            margin-left: 6px;
         }
 
-        /* Sent messages (Your messages) - Right side */
+        /* Sent messages (Your messages) - RIGHT SIDE with GREEN background */
         .message.sent .message-content {
             background: #dcf8c6;
             color: #000;
             border-bottom-right-radius: 4px;
             box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
-            margin-left: 6px;
         }
 
-        /* Received messages (Other person's messages) - Left side */
+        /* Received messages (Other person's messages) - LEFT SIDE with WHITE background */
         .message.received .message-content {
             background: white;
             color: #000;
             border-bottom-left-radius: 4px;
             box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+            margin-left: 0;
             margin-right: 6px;
         }
 
@@ -1198,14 +1166,6 @@
             /* Chat messages responsive */
             .message {
                 max-width: 85%;
-            }
-            
-            .message.sent .message-content {
-                margin-left: 4px;
-            }
-            
-            .message.received .message-content {
-                margin-right: 4px;
             }
         }
         
@@ -1710,7 +1670,6 @@
         let profileImageFile = null;
         let groupImageFile = null;
         let lastSenderId = null;
-        let lastMessageTime = null;
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
@@ -2687,7 +2646,6 @@
             
             // Reset tracking variables
             lastSenderId = null;
-            lastMessageTime = null;
             
             if (messageListener) {
                 messageListener();
@@ -2717,7 +2675,6 @@
                 
                 // Reset tracking for new messages
                 lastSenderId = null;
-                lastMessageTime = null;
                 
                 snapshot.forEach((doc) => {
                     const message = doc.data();
@@ -2740,7 +2697,6 @@
                 systemDiv.textContent = message.content;
                 messagesContainer.appendChild(systemDiv);
                 lastSenderId = null;
-                lastMessageTime = null;
             } else {
                 const messageDiv = document.createElement('div');
                 const isSent = message.senderId === currentUser.uid;
@@ -2772,13 +2728,6 @@
                 messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
                 
                 messageDiv.innerHTML = `
-                    ${!isSent ? `
-                        <div class="message-avatar">
-                            ${senderImage ? 
-                                `<img src="${senderImage}" alt="${senderName}">` : 
-                                avatarText}
-                        </div>
-                    ` : ''}
                     <div class="message-content-wrapper">
                         ${showSenderName ? `<div class="sender-name">${senderName}</div>` : ''}
                         <div class="message-content">${message.content}</div>
@@ -2786,20 +2735,12 @@
                             <span class="message-time">${time}</span>
                         </div>
                     </div>
-                    ${isSent ? `
-                        <div class="message-avatar">
-                            ${senderImage ? 
-                                `<img src="${senderImage}" alt="${senderName}">` : 
-                                avatarText}
-                        </div>
-                    ` : ''}
                 `;
                 
                 messagesContainer.appendChild(messageDiv);
                 
                 // Update tracking variables
                 lastSenderId = message.senderId;
-                lastMessageTime = message.timestamp;
             }
         };
 
@@ -2850,7 +2791,6 @@
             currentChatType = null;
             currentChatData = null;
             lastSenderId = null;
-            lastMessageTime = null;
             
             document.getElementById('chatInterface').style.display = 'none';
             document.getElementById('mainContainer').style.display = 'flex';
