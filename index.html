@@ -1,0 +1,2420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Chat App</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            max-width: 100%;
+            height: 100vh;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Auth Container */
+        .auth-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 20px;
+            background: white;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+        }
+
+        .auth-header h1 {
+            color: var(--dark);
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: var(--light-gray);
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 25px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: transparent;
+            color: var(--gray);
+            font-weight: 600;
+            font-size: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .auth-tab.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
+        }
+
+        .auth-form {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 10px;
+        }
+
+        .auth-btn:active {
+            transform: scale(0.98);
+        }
+
+        .error-message {
+            background: #fee;
+            color: var(--danger);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+            border-left: 4px solid var(--danger);
+        }
+
+        /* Main App */
+        .main-container {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            padding: 15px 20px;
+            background: white;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        .header-btn:active {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 80px;
+            background: var(--light);
+        }
+
+        /* Home Page */
+        .welcome-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .user-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .avatar-text {
+            z-index: 1;
+        }
+
+        .user-details h3 {
+            font-size: 20px;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .user-details p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--light-gray);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .action-card:active {
+            transform: scale(0.98);
+        }
+
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .action-card h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .action-card p {
+            color: var(--gray);
+            font-size: 12px;
+        }
+
+        /* Form Pages */
+        .page-container {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page-container.active {
+            display: block;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-card h2 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .form-card p {
+            color: var(--gray);
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .radio-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .radio-option input {
+            display: none;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 15px;
+            background: var(--light-gray);
+            border-radius: 12px;
+            text-align: center;
+            color: var(--gray);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option input:checked + label {
+            background: var(--primary);
+            color: white;
+        }
+
+        .file-upload {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .file-upload input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+        }
+
+        .file-upload label {
+            display: block;
+            padding: 20px;
+            border: 2px dashed var(--light-gray);
+            border-radius: 12px;
+            text-align: center;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload label:hover {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        /* Lists */
+        .list-container {
+            display: grid;
+            gap: 15px;
+        }
+
+        .room-card, .group-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .room-avatar, .group-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .room-avatar img, .group-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .room-info, .group-info {
+            flex: 1;
+        }
+
+        .room-info h3, .group-info h3 {
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .room-info p, .group-info p {
+            color: var(--gray);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .room-meta, .group-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 12px;
+        }
+
+        .primary-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-top: 10px;
+        }
+
+        .primary-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 1001;
+        }
+
+        .chat-header {
+            padding: 15px 20px;
+            background: white;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chat-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .chat-title {
+            flex: 1;
+        }
+
+        .chat-title h3 {
+            color: var(--dark);
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+
+        .chat-title p {
+            color: var(--gray);
+            font-size: 12px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+
+        .message.sent {
+            margin-left: auto;
+        }
+
+        .message-content {
+            padding: 12px 16px;
+            border-radius: 18px;
+            background: var(--primary);
+            color: white;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .message.received .message-content {
+            background: white;
+            color: var(--dark);
+            border: 1px solid var(--light-gray);
+        }
+
+        .message-info {
+            font-size: 11px;
+            color: var(--gray);
+            margin-top: 4px;
+            padding: 0 8px;
+        }
+
+        .system-message {
+            text-align: center;
+            color: var(--gray);
+            font-size: 13px;
+            font-style: italic;
+            margin: 10px 0;
+        }
+
+        .chat-input {
+            padding: 15px 20px;
+            background: white;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: 25px;
+            font-size: 15px;
+        }
+
+        .chat-input input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Settings Page */
+        .settings-list {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .settings-item {
+            padding: 20px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .settings-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .settings-item h4 {
+            color: var(--dark);
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .settings-item p {
+            color: var(--gray);
+            font-size: 12px;
+        }
+
+        .settings-arrow {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: var(--dark);
+            font-size: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .members-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+
+        .member-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .member-info h4 {
+            color: var(--dark);
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .member-info p {
+            color: var(--gray);
+            font-size: 12px;
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .admin-btn, .kick-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .admin-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .kick-btn {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            color: var(--light-gray);
+            margin-bottom: 15px;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 15px;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 12px;
+            transition: all 0.3s;
+            border-radius: 10px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-gray);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Authentication Container -->
+        <div class="auth-container active" id="authContainer">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h1>Secure Chat</h1>
+                <p>Private and secure messaging</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+                <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+            </div>
+
+            <div class="auth-form">
+                <div id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="loginEmail" class="form-input" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required>
+                    </div>
+                    <button class="auth-btn" onclick="login()">Login</button>
+                </div>
+
+                <div id="signupForm" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="signupName" class="form-input" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="signupPassword" class="form-input" placeholder="Create a password" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+                    </div>
+                    <button class="auth-btn" onclick="signup()">Create Account</button>
+                </div>
+
+                <div class="error-message" id="errorMessage"></div>
+            </div>
+        </div>
+
+        <!-- Main Application Container -->
+        <div class="main-container" id="mainContainer">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-title" id="pageTitle">Home</div>
+                <div class="header-actions">
+                    <button class="header-btn" onclick="logout()" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Home Page -->
+                <div id="homePage" class="page-container active">
+                    <div class="welcome-card">
+                        <div class="user-info">
+                            <div class="user-avatar" id="userAvatar">
+                                <div class="avatar-text" id="avatarText">U</div>
+                            </div>
+                            <div class="user-details">
+                                <h3 id="userName">Loading...</h3>
+                                <p id="userEmail">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <div class="action-card" onclick="showPage('createRoom')">
+                            <div class="action-icon">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <h4>Create Room</h4>
+                            <p>Start new chat room</p>
+                        </div>
+                        <div class="action-card" onclick="showPage('joinRoom')">
+                            <div class="action-icon">
+                                <i class="fas fa-door-open"></i>
+                            </div>
+                            <h4>Join Room</h4>
+                            <p>Enter existing room</p>
+                        </div>
+                        <div class="action-card" onclick="showPage('createGroup')">
+                            <div class="action-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h4>Create Group</h4>
+                            <p>Permanent group chat</p>
+                        </div>
+                        <div class="action-card" onclick="showPage('myGroups')">
+                            <div class="action-icon">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <h4>My Groups</h4>
+                            <p>Manage your groups</p>
+                        </div>
+                        <div class="action-card" onclick="showPage('myRooms')">
+                            <div class="action-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <h4>My Rooms</h4>
+                            <p>Your chat rooms</p>
+                        </div>
+                        <div class="action-card" onclick="showPage('settings')">
+                            <div class="action-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <h4>Settings</h4>
+                            <p>Account & preferences</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create Room Page -->
+                <div id="createRoomPage" class="page-container">
+                    <div class="form-card">
+                        <h2>Create New Room</h2>
+                        <p>Create a private or public chat room</p>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Room Name</label>
+                            <input type="text" id="roomName" class="form-input" placeholder="Enter room name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Maximum Members</label>
+                            <input type="number" id="roomMembers" class="form-input" min="2" max="100" value="10" required>
+                        </div>
+                        
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="publicRoom" name="roomType" value="public" checked onchange="toggleRoomPassword()">
+                                <label for="publicRoom">Public Room</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="privateRoom" name="roomType" value="private" onchange="toggleRoomPassword()">
+                                <label for="privateRoom">Private Room</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" id="roomPasswordGroup">
+                            <label class="form-label">Room Password</label>
+                            <input type="password" id="roomPassword" class="form-input" placeholder="Enter password (required for private rooms)">
+                        </div>
+                        
+                        <button class="primary-btn" onclick="createRoom()">Create Room</button>
+                    </div>
+                </div>
+
+                <!-- Join Room Page -->
+                <div id="joinRoomPage" class="page-container">
+                    <div class="form-card">
+                        <h2>Join Room</h2>
+                        <p>Enter room ID or name to join</p>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Room ID or Name</label>
+                            <input type="text" id="joinRoomId" class="form-input" placeholder="Enter room ID or name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" id="joinRoomPassword" class="form-input" placeholder="Enter room password">
+                        </div>
+                        
+                        <button class="primary-btn" onclick="joinRoom()">Join Room</button>
+                    </div>
+                </div>
+
+                <!-- Create Group Page -->
+                <div id="createGroupPage" class="page-container">
+                    <div class="form-card">
+                        <h2>Create New Group</h2>
+                        <p>Create a group for permanent messaging</p>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Group Name</label>
+                            <input type="text" id="groupName" class="form-input" placeholder="Enter group name" required>
+                        </div>
+                        
+                        <div class="form-group file-upload">
+                            <input type="file" id="groupImage" accept="image/*">
+                            <label for="groupImage">
+                                <i class="fas fa-cloud-upload-alt"></i> Upload Group Image
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Maximum Members</label>
+                            <input type="number" id="groupMembers" class="form-input" min="2" max="500" value="50" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" id="groupPassword" class="form-input" placeholder="Enter group password" required>
+                        </div>
+                        
+                        <button class="primary-btn" onclick="createGroup()">Create Group</button>
+                    </div>
+                </div>
+
+                <!-- My Groups Page -->
+                <div id="myGroupsPage" class="page-container">
+                    <div class="form-card">
+                        <h2>My Groups</h2>
+                        <p>Manage and join your groups</p>
+                    </div>
+                    <div id="groupsList" class="list-container">
+                        <!-- Groups will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- My Rooms Page -->
+                <div id="myRoomsPage" class="page-container">
+                    <div class="form-card">
+                        <h2>My Rooms</h2>
+                        <p>Your created and joined rooms</p>
+                    </div>
+                    <div id="roomsList" class="list-container">
+                        <!-- Rooms will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="settingsPage" class="page-container">
+                    <div class="form-card">
+                        <h2>Profile Settings</h2>
+                        <p>Update your profile information</p>
+                        
+                        <div class="form-group file-upload">
+                            <input type="file" id="profileImage" accept="image/*" onchange="previewProfileImage()">
+                            <label for="profileImage">
+                                <i class="fas fa-camera"></i> Change Profile Picture
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Display Name</label>
+                            <input type="text" id="displayName" class="form-input" placeholder="Enter your name">
+                        </div>
+                        
+                        <button class="primary-btn" onclick="updateProfile()">Update Profile</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="nav-container">
+                <a href="#" class="nav-item active" onclick="showPage('home')">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('myRooms')">
+                    <i class="fas fa-home"></i>
+                    <span>Rooms</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('myGroups')">
+                    <i class="fas fa-users"></i>
+                    <span>Groups</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Chat Interface -->
+        <div id="chatInterface" class="chat-container">
+            <div class="chat-header">
+                <button class="back-btn" onclick="closeChat()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="chat-avatar" id="chatAvatar">
+                    <div id="chatAvatarText"></div>
+                </div>
+                <div class="chat-title">
+                    <h3 id="chatTitle">Room Name</h3>
+                    <p id="chatInfo">0 members online</p>
+                </div>
+                <button class="header-btn" onclick="showChatSettings()">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will be loaded here -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button class="send-btn" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal" id="settingsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Room Settings</h2>
+                    <button class="close-btn" onclick="closeSettings()">&times;</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Member Limit</label>
+                    <input type="number" id="memberLimit" class="form-input" min="2" max="1000">
+                </div>
+                <h3>Members</h3>
+                <div class="members-list" id="membersList">
+                    <!-- Members will be loaded here -->
+                </div>
+                <button class="primary-btn" onclick="saveSettings()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            updateProfile as updateAuthProfile
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            doc, 
+            setDoc, 
+            getDoc, 
+            getDocs, 
+            query, 
+            where, 
+            updateDoc, 
+            arrayUnion, 
+            arrayRemove,
+            serverTimestamp,
+            onSnapshot,
+            addDoc,
+            orderBy
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { 
+            getStorage,
+            ref,
+            uploadBytes,
+            getDownloadURL,
+            deleteObject
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+        // Firebase configuration - UPDATED WITH YOUR CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoqnPMnB13cTNSfJWkPsvr4_RFUWEVoWI",
+            authDomain: "sk-pvt-chat.firebaseapp.com",
+            projectId: "sk-pvt-chat",
+            storageBucket: "sk-pvt-chat.firebasestorage.app",
+            messagingSenderId: "150923025247",
+            appId: "1:150923025247:web:d504c10f9b77b5f2e4b4ea",
+            measurementId: "G-CC7CYD7BFQ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Global variables
+        let currentUser = null;
+        let currentChatId = null;
+        let currentChatType = null;
+        let currentChatData = null;
+        let messageListener = null;
+        let profileImageFile = null;
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auth state observer
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUser = user;
+                    console.log("User authenticated:", user.email);
+                    await loadUserData();
+                    showMainApp();
+                    // Load rooms and groups after a short delay to ensure user data is loaded
+                    setTimeout(() => {
+                        loadMyRooms();
+                        loadMyGroups();
+                    }, 1000);
+                } else {
+                    console.log("No user, showing auth");
+                    showAuth();
+                }
+            });
+        });
+
+        // Login function
+        window.login = async function() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showError('Please enter email and password');
+                return;
+            }
+            
+            showError('');
+            
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                console.log('Login successful:', userCredential.user.email);
+            } catch (error) {
+                console.error('Login error:', error);
+                switch (error.code) {
+                    case 'auth/invalid-credential':
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                        showError('Invalid email or password');
+                        break;
+                    default:
+                        showError('Login failed: ' + error.message);
+                }
+            }
+        };
+
+        // Signup function
+        window.signup = async function() {
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!name || !email || !password || !confirmPassword) {
+                showError('Please fill all fields');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showError('Passwords do not match');
+                return;
+            }
+            
+            showError('');
+            
+            try {
+                // Create user in Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Update display name
+                await updateAuthProfile(userCredential.user, {
+                    displayName: name
+                });
+                
+                // Create user document in Firestore
+                await setDoc(doc(db, 'users', userCredential.user.uid), {
+                    name: name,
+                    email: email,
+                    createdAt: serverTimestamp(),
+                    rooms: [],
+                    groups: [],
+                    profileImage: '',
+                    lastSeen: serverTimestamp()
+                });
+                
+                console.log('Signup successful:', userCredential.user.uid);
+            } catch (error) {
+                console.error('Signup error:', error);
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        showError('Email already in use');
+                        break;
+                    case 'auth/invalid-email':
+                        showError('Invalid email address');
+                        break;
+                    case 'auth/weak-password':
+                        showError('Password is too weak');
+                        break;
+                    default:
+                        showError('Signup failed: ' + error.message);
+                }
+            }
+        };
+
+        // Logout
+        window.logout = async function() {
+            if (confirm('Are you sure you want to logout?')) {
+                try {
+                    await signOut(auth);
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            }
+        };
+
+        // Show error
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = message ? 'block' : 'none';
+            }
+        }
+
+        // Switch auth tabs
+        window.switchAuthTab = function(tab) {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const tabs = document.querySelectorAll('.auth-tab');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tab === 'login') {
+                loginForm.style.display = 'block';
+                signupForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'block';
+            }
+            
+            showError('');
+        };
+
+        // Show main app
+        function showMainApp() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'flex';
+        }
+
+        // Show auth
+        function showAuth() {
+            document.getElementById('authContainer').style.display = 'flex';
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('chatInterface').style.display = 'none';
+        }
+
+        // Load user data - FIXED VERSION
+        async function loadUserData() {
+            if (!auth.currentUser) {
+                console.log("No current user found");
+                return;
+            }
+            
+            currentUser = auth.currentUser;
+            console.log("Loading data for user:", currentUser.uid);
+            
+            try {
+                // Get user document from Firestore
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                
+                if (!userDoc.exists()) {
+                    console.log("User document doesn't exist, creating...");
+                    // Create user document if it doesn't exist
+                    await setDoc(doc(db, 'users', currentUser.uid), {
+                        name: currentUser.displayName || currentUser.email.split('@')[0],
+                        email: currentUser.email,
+                        createdAt: serverTimestamp(),
+                        rooms: [],
+                        groups: [],
+                        profileImage: '',
+                        lastSeen: serverTimestamp()
+                    });
+                    
+                    // Reload the document
+                    const newUserDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                    updateUserUI(newUserDoc.data());
+                } else {
+                    console.log("User document found, updating UI");
+                    updateUserUI(userDoc.data());
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                // Show default user info as fallback
+                document.getElementById('userName').textContent = currentUser.email.split('@')[0];
+                document.getElementById('userEmail').textContent = currentUser.email;
+                document.getElementById('avatarText').textContent = currentUser.email.charAt(0).toUpperCase();
+            }
+        }
+
+        // Update user UI - FIXED VERSION
+        function updateUserUI(userData) {
+            console.log("Updating UI with user data:", userData);
+            
+            // Use the name from Firestore, not from auth
+            const userName = userData?.name || currentUser.email.split('@')[0];
+            const userEmail = currentUser.email;
+            const profileImage = userData?.profileImage || '';
+            
+            // Update all user elements
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('userEmail').textContent = userEmail;
+            
+            // Update display name field if exists
+            const displayNameInput = document.getElementById('displayName');
+            if (displayNameInput) {
+                displayNameInput.value = userName;
+            }
+            
+            // Update avatar
+            const avatarElement = document.getElementById('userAvatar');
+            const avatarText = document.getElementById('avatarText');
+            
+            if (profileImage) {
+                // Remove existing image if any
+                const existingImg = avatarElement.querySelector('img');
+                if (existingImg) existingImg.remove();
+                
+                // Create and add new image
+                const img = document.createElement('img');
+                img.src = profileImage;
+                img.alt = userName;
+                avatarElement.appendChild(img);
+                avatarText.style.display = 'none';
+            } else {
+                // Remove existing image if any
+                const existingImg = avatarElement.querySelector('img');
+                if (existingImg) existingImg.remove();
+                
+                // Show text
+                avatarText.textContent = userName.charAt(0).toUpperCase();
+                avatarText.style.display = 'flex';
+            }
+        }
+
+        // Preview profile image before upload
+        window.previewProfileImage = function() {
+            const file = document.getElementById('profileImage').files[0];
+            if (file) {
+                profileImageFile = file;
+                
+                // Create preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatarElement = document.getElementById('userAvatar');
+                    const avatarText = document.getElementById('avatarText');
+                    
+                    // Remove existing image if any
+                    const existingImg = avatarElement.querySelector('img');
+                    if (existingImg) existingImg.remove();
+                    
+                    // Create and add preview image
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = "Profile preview";
+                    avatarElement.appendChild(img);
+                    avatarText.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Show page
+        window.showPage = function(pageName) {
+            // Update page title
+            const pageTitles = {
+                'home': 'Home',
+                'createRoom': 'Create Room',
+                'joinRoom': 'Join Room',
+                'createGroup': 'Create Group',
+                'myGroups': 'My Groups',
+                'myRooms': 'My Rooms',
+                'settings': 'Settings'
+            };
+            
+            document.getElementById('pageTitle').textContent = pageTitles[pageName] || 'Home';
+            
+            // Hide all pages
+            document.querySelectorAll('.page-container').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageName + 'Page').classList.add('active');
+            
+            // Update bottom nav active state
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Set active based on page
+            if (pageName === 'home') {
+                document.querySelector('.nav-item:nth-child(1)').classList.add('active');
+            } else if (pageName === 'myRooms') {
+                document.querySelector('.nav-item:nth-child(2)').classList.add('active');
+                loadMyRooms();
+            } else if (pageName === 'myGroups') {
+                document.querySelector('.nav-item:nth-child(3)').classList.add('active');
+                loadMyGroups();
+            } else if (pageName === 'settings') {
+                document.querySelector('.nav-item:nth-child(4)').classList.add('active');
+            }
+            
+            // Load data for specific pages
+            if (pageName === 'createRoom') {
+                toggleRoomPassword();
+            }
+        };
+
+        // Toggle room password requirement
+        window.toggleRoomPassword = function() {
+            const isPrivate = document.getElementById('privateRoom')?.checked;
+            const passwordInput = document.getElementById('roomPassword');
+            
+            if (passwordInput) {
+                if (isPrivate) {
+                    passwordInput.required = true;
+                    passwordInput.placeholder = "Enter password (required for private room)";
+                } else {
+                    passwordInput.required = false;
+                    passwordInput.placeholder = "Enter password (optional for public room)";
+                }
+            }
+        };
+
+        // Create room - FIXED to open chat directly
+        window.createRoom = async function() {
+            const name = document.getElementById('roomName').value.trim();
+            const maxMembers = parseInt(document.getElementById('roomMembers').value);
+            const password = document.getElementById('roomPassword').value;
+            const isPrivate = document.getElementById('privateRoom').checked;
+            
+            // Validation
+            if (!name) {
+                alert('Please enter room name');
+                return;
+            }
+            
+            if (isPrivate && !password) {
+                alert('Password is required for private rooms');
+                return;
+            }
+            
+            try {
+                // Check if room name exists
+                const roomsRef = collection(db, 'rooms');
+                const q = query(roomsRef, where('name', '==', name));
+                const snapshot = await getDocs(q);
+                
+                if (!snapshot.empty) {
+                    alert('Room name already exists. Please choose another name.');
+                    return;
+                }
+                
+                // Get user data
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                const userData = userDoc.data();
+                
+                // Create room
+                const roomId = 'room_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const roomData = {
+                    name: name,
+                    admin: currentUser.uid,
+                    adminName: userData?.name || currentUser.email.split('@')[0],
+                    maxMembers: maxMembers,
+                    password: isPrivate ? password : '',
+                    isPrivate: isPrivate,
+                    members: [currentUser.uid],
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp(),
+                    imageUrl: ''
+                };
+                
+                await setDoc(doc(db, 'rooms', roomId), roomData);
+                
+                // Add to user's rooms
+                await updateDoc(doc(db, 'users', currentUser.uid), {
+                    rooms: arrayUnion(roomId)
+                });
+                
+                // Clear form
+                document.getElementById('roomName').value = '';
+                document.getElementById('roomPassword').value = '';
+                
+                // Show success and OPEN CHAT DIRECTLY
+                console.log('Room created, opening chat:', roomId);
+                await enterRoom(roomId);
+                
+            } catch (error) {
+                console.error('Error creating room:', error);
+                alert('Error creating room: ' + error.message);
+            }
+        };
+
+        // Join room - FIXED to open chat directly
+        window.joinRoom = async function() {
+            const roomIdOrName = document.getElementById('joinRoomId').value.trim();
+            const password = document.getElementById('joinRoomPassword').value;
+            
+            if (!roomIdOrName) {
+                alert('Please enter room ID or name');
+                return;
+            }
+            
+            try {
+                let roomId, roomData;
+                
+                // Try to find room by ID
+                try {
+                    const roomRef = doc(db, 'rooms', roomIdOrName);
+                    const roomDoc = await getDoc(roomRef);
+                    
+                    if (roomDoc.exists()) {
+                        roomId = roomIdOrName;
+                        roomData = roomDoc.data();
+                    }
+                } catch (e) {
+                    console.log("Not a valid room ID, trying name search");
+                }
+                
+                // If not found by ID, try by name
+                if (!roomId) {
+                    const roomsRef = collection(db, 'rooms');
+                    const q = query(roomsRef, where('name', '==', roomIdOrName));
+                    const snapshot = await getDocs(q);
+                    
+                    if (snapshot.empty) {
+                        alert('Room not found');
+                        return;
+                    }
+                    
+                    roomId = snapshot.docs[0].id;
+                    roomData = snapshot.docs[0].data();
+                }
+                
+                // Check if already member
+                if (roomData.members.includes(currentUser.uid)) {
+                    // Already a member, just open the room
+                    console.log('Already member, opening chat:', roomId);
+                    await enterRoom(roomId);
+                    return;
+                }
+                
+                // Check password for private rooms
+                if (roomData.isPrivate && roomData.password !== password) {
+                    alert('Incorrect password');
+                    return;
+                }
+                
+                // Check member limit
+                if (roomData.members.length >= roomData.maxMembers) {
+                    alert('Room is full');
+                    return;
+                }
+                
+                // Get user data
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                const userData = userDoc.data();
+                
+                // Add user to room
+                await updateDoc(doc(db, 'rooms', roomId), {
+                    members: arrayUnion(currentUser.uid),
+                    updatedAt: serverTimestamp()
+                });
+                
+                // Add room to user's rooms
+                await updateDoc(doc(db, 'users', currentUser.uid), {
+                    rooms: arrayUnion(roomId)
+                });
+                
+                // Add join message
+                await addDoc(collection(db, 'rooms', roomId, 'messages'), {
+                    type: 'system',
+                    content: `${userData?.name || 'User'} joined the room`,
+                    senderId: currentUser.uid,
+                    senderName: userData?.name || 'User',
+                    timestamp: serverTimestamp()
+                });
+                
+                // Clear form
+                document.getElementById('joinRoomId').value = '';
+                document.getElementById('joinRoomPassword').value = '';
+                
+                // OPEN CHAT DIRECTLY
+                console.log('Joined room, opening chat:', roomId);
+                await enterRoom(roomId);
+                
+            } catch (error) {
+                console.error('Error joining room:', error);
+                alert('Error joining room: ' + error.message);
+            }
+        };
+
+        // Create group - FIXED to open chat directly
+        window.createGroup = async function() {
+            const name = document.getElementById('groupName').value.trim();
+            const maxMembers = parseInt(document.getElementById('groupMembers').value);
+            const password = document.getElementById('groupPassword').value;
+            const imageFile = document.getElementById('groupImage').files[0];
+            
+            // Validation
+            if (!name || !password) {
+                alert('Please fill all required fields');
+                return;
+            }
+            
+            if (password.length < 4) {
+                alert('Password must be at least 4 characters');
+                return;
+            }
+            
+            try {
+                let imageUrl = '';
+                
+                // Upload image if provided
+                if (imageFile) {
+                    const storageRef = ref(storage, `groups/${currentUser.uid}_${Date.now()}_${imageFile.name}`);
+                    await uploadBytes(storageRef, imageFile);
+                    imageUrl = await getDownloadURL(storageRef);
+                }
+                
+                // Get user data
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                const userData = userDoc.data();
+                
+                // Create group
+                const groupId = 'group_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const groupData = {
+                    name: name,
+                    admin: currentUser.uid,
+                    adminName: userData?.name || currentUser.email.split('@')[0],
+                    maxMembers: maxMembers,
+                    password: password,
+                    members: [currentUser.uid],
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp(),
+                    imageUrl: imageUrl
+                };
+                
+                await setDoc(doc(db, 'groups', groupId), groupData);
+                
+                // Add to user's groups
+                await updateDoc(doc(db, 'users', currentUser.uid), {
+                    groups: arrayUnion(groupId)
+                });
+                
+                // Clear form
+                document.getElementById('groupName').value = '';
+                document.getElementById('groupPassword').value = '';
+                document.getElementById('groupImage').value = '';
+                
+                // Show success and OPEN CHAT DIRECTLY
+                console.log('Group created, opening chat:', groupId);
+                await enterGroup(groupId);
+                
+            } catch (error) {
+                console.error('Error creating group:', error);
+                alert('Error creating group: ' + error.message);
+            }
+        };
+
+        // Load my rooms
+        async function loadMyRooms() {
+            if (!currentUser) return;
+            
+            try {
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                const userData = userDoc.data();
+                const roomIds = userData?.rooms || [];
+                
+                const roomsList = document.getElementById('roomsList');
+                
+                if (roomIds.length === 0) {
+                    roomsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-door-closed"></i>
+                            </div>
+                            <h3>No Rooms Yet</h3>
+                            <p>Create or join a room to get started</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                roomsList.innerHTML = '';
+                
+                // Load room data for each room ID
+                for (const roomId of roomIds) {
+                    try {
+                        const roomDoc = await getDoc(doc(db, 'rooms', roomId));
+                        if (roomDoc.exists()) {
+                            const roomData = roomDoc.data();
+                            
+                            const roomCard = document.createElement('div');
+                            roomCard.className = 'room-card';
+                            roomCard.onclick = () => enterRoom(roomId);
+                            
+                            const isAdmin = roomData.admin === currentUser.uid;
+                            const isPrivate = roomData.isPrivate;
+                            
+                            roomCard.innerHTML = `
+                                <div class="room-avatar">
+                                    ${roomData.imageUrl ? 
+                                        `<img src="${roomData.imageUrl}" alt="${roomData.name}">` : 
+                                        roomData.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div class="room-info">
+                                    <h3>${roomData.name}</h3>
+                                    <p>
+                                        <span><i class="fas ${isPrivate ? 'fa-lock' : 'fa-globe'}"></i> ${isPrivate ? 'Private' : 'Public'}</span>
+                                        <span><i class="fas ${isAdmin ? 'fa-crown' : 'fa-user'}"></i> ${isAdmin ? 'Admin' : 'Member'}</span>
+                                    </p>
+                                    <div class="room-meta">
+                                        <span><i class="fas fa-users"></i> ${roomData.members?.length || 0}/${roomData.maxMembers}</span>
+                                        <span><i class="fas fa-calendar"></i> ${formatDate(roomData.createdAt)}</span>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            roomsList.appendChild(roomCard);
+                        }
+                    } catch (error) {
+                        console.error('Error loading room:', roomId, error);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error loading rooms:', error);
+                document.getElementById('roomsList').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <h3>Error Loading Rooms</h3>
+                        <p>Please try again later</p>
+                    </div>
+                `;
+            }
+        };
+
+        // Load my groups
+        async function loadMyGroups() {
+            if (!currentUser) return;
+            
+            try {
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                const userData = userDoc.data();
+                const groupIds = userData?.groups || [];
+                
+                const groupsList = document.getElementById('groupsList');
+                
+                if (groupIds.length === 0) {
+                    groupsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-users-slash"></i>
+                            </div>
+                            <h3>No Groups Yet</h3>
+                            <p>Create or join a group to get started</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                groupsList.innerHTML = '';
+                
+                // Load group data for each group ID
+                for (const groupId of groupIds) {
+                    try {
+                        const groupDoc = await getDoc(doc(db, 'groups', groupId));
+                        if (groupDoc.exists()) {
+                            const groupData = groupDoc.data();
+                            
+                            const groupCard = document.createElement('div');
+                            groupCard.className = 'group-card';
+                            groupCard.onclick = () => enterGroup(groupId);
+                            
+                            const isAdmin = groupData.admin === currentUser.uid;
+                            
+                            groupCard.innerHTML = `
+                                <div class="group-avatar">
+                                    ${groupData.imageUrl ? 
+                                        `<img src="${groupData.imageUrl}" alt="${groupData.name}">` : 
+                                        groupData.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div class="group-info">
+                                    <h3>${groupData.name}</h3>
+                                    <p>
+                                        <span><i class="fas fa-users"></i> Group</span>
+                                        <span><i class="fas ${isAdmin ? 'fa-crown' : 'fa-user'}"></i> ${isAdmin ? 'Admin' : 'Member'}</span>
+                                    </p>
+                                    <div class="group-meta">
+                                        <span><i class="fas fa-users"></i> ${groupData.members?.length || 0}/${groupData.maxMembers}</span>
+                                        <span><i class="fas fa-calendar"></i> ${formatDate(groupData.createdAt)}</span>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            groupsList.appendChild(groupCard);
+                        }
+                    } catch (error) {
+                        console.error('Error loading group:', groupId, error);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error loading groups:', error);
+                document.getElementById('groupsList').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <h3>Error Loading Groups</h3>
+                        <p>Please try again later</p>
+                    </div>
+                `;
+            }
+        };
+
+        // Format date
+        function formatDate(timestamp) {
+            if (!timestamp) return '';
+            try {
+                const date = timestamp.toDate();
+                const now = new Date();
+                const diff = now - date;
+                const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 0) return 'Today';
+                if (diffDays === 1) return 'Yesterday';
+                if (diffDays < 7) return `${diffDays} days ago`;
+                return date.toLocaleDateString();
+            } catch (error) {
+                return '';
+            }
+        };
+
+        // Enter room - FIXED
+        async function enterRoom(roomId) {
+            try {
+                currentChatId = roomId;
+                currentChatType = 'rooms';
+                
+                // Load room data
+                const roomDoc = await getDoc(doc(db, 'rooms', roomId));
+                currentChatData = roomDoc.data();
+                
+                if (!currentChatData) {
+                    throw new Error('Room not found');
+                }
+                
+                // Update chat UI
+                document.getElementById('chatTitle').textContent = currentChatData.name;
+                document.getElementById('chatInfo').textContent = `${currentChatData.members?.length || 0} members • ${currentChatData.isPrivate ? 'Private' : 'Public'}`;
+                
+                // Set chat avatar
+                const chatAvatar = document.getElementById('chatAvatar');
+                const chatAvatarText = document.getElementById('chatAvatarText');
+                
+                if (currentChatData.imageUrl) {
+                    // Remove existing image if any
+                    const existingImg = chatAvatar.querySelector('img');
+                    if (existingImg) existingImg.remove();
+                    
+                    // Add image
+                    const img = document.createElement('img');
+                    img.src = currentChatData.imageUrl;
+                    img.alt = currentChatData.name;
+                    chatAvatar.appendChild(img);
+                    chatAvatarText.style.display = 'none';
+                } else {
+                    // Remove existing image if any
+                    const existingImg = chatAvatar.querySelector('img');
+                    if (existingImg) existingImg.remove();
+                    
+                    // Show text
+                    chatAvatarText.textContent = currentChatData.name.charAt(0).toUpperCase();
+                    chatAvatarText.style.display = 'flex';
+                }
+                
+                // Show chat interface
+                document.getElementById('mainContainer').style.display = 'none';
+                document.getElementById('chatInterface').style.display = 'flex';
+                
+                // Load messages
+                loadMessages();
+                
+            } catch (error) {
+                console.error('Error entering room:', error);
+                alert('Error entering room: ' + error.message);
+            }
+        };
+
+        // Enter group - FIXED
+        async function enterGroup(groupId) {
+            try {
+                currentChatId = groupId;
+                currentChatType = 'groups';
+                
+                // Load group data
+                const groupDoc = await getDoc(doc(db, 'groups', groupId));
+                currentChatData = groupDoc.data();
+                
+                if (!currentChatData) {
+                    throw new Error('Group not found');
+                }
+                
+                // Update chat UI
+                document.getElementById('chatTitle').textContent = currentChatData.name;
+                document.getElementById('chatInfo').textContent = `${currentChatData.members?.length || 0} members • Group`;
+                
+                // Set chat avatar
+                const chatAvatar = document.getElementById('chatAvatar');
+                const chatAvatarText = document.getElementById('chatAvatarText');
+                
+                if (currentChatData.imageUrl) {
+                    // Remove existing image if any
+                    const existingImg = chatAvatar.querySelector('img');
+                    if (existingImg) existingImg.remove();
+                    
+                    // Add image
+                    const img = document.createElement('img');
+                    img.src = currentChatData.imageUrl;
+                    img.alt = currentChatData.name;
+                    chatAvatar.appendChild(img);
+                    chatAvatarText.style.display = 'none';
+                } else {
+                    // Remove existing image if any
+                    const existingImg = chatAvatar.querySelector('img');
+                    if (existingImg) existingImg.remove();
+                    
+                    // Show text
+                    chatAvatarText.textContent = currentChatData.name.charAt(0).toUpperCase();
+                    chatAvatarText.style.display = 'flex';
+                }
+                
+                // Show chat interface
+                document.getElementById('mainContainer').style.display = 'none';
+                document.getElementById('chatInterface').style.display = 'flex';
+                
+                // Load messages
+                loadMessages();
+                
+            } catch (error) {
+                console.error('Error entering group:', error);
+                alert('Error entering group: ' + error.message);
+            }
+        };
+
+        // Load messages
+        function loadMessages() {
+            if (!currentChatId || !currentChatType) return;
+            
+            // Clear previous listener
+            if (messageListener) {
+                messageListener();
+            }
+            
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML = '<div class="spinner" style="margin: 20px auto;"></div>';
+            
+            // Setup real-time listener for messages
+            const messagesRef = collection(db, currentChatType, currentChatId, 'messages');
+            const q = query(messagesRef, orderBy('timestamp', 'asc'));
+            
+            messageListener = onSnapshot(q, (snapshot) => {
+                messagesContainer.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    messagesContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-comment-slash"></i>
+                            </div>
+                            <h3>No Messages Yet</h3>
+                            <p>Send the first message to start the conversation!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                snapshot.forEach((doc) => {
+                    const message = doc.data();
+                    displayMessage(message);
+                });
+                
+                // Scroll to bottom
+                setTimeout(() => {
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, 100);
+            });
+        };
+
+        // Display message
+        function displayMessage(message) {
+            const messagesContainer = document.getElementById('chatMessages');
+            
+            if (message.type === 'system') {
+                const systemDiv = document.createElement('div');
+                systemDiv.className = 'system-message';
+                systemDiv.textContent = message.content;
+                messagesContainer.appendChild(systemDiv);
+            } else {
+                const messageDiv = document.createElement('div');
+                const isSent = message.senderId === currentUser.uid;
+                messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
+                
+                const time = message.timestamp?.toDate ? 
+                    message.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 
+                    'Just now';
+                
+                messageDiv.innerHTML = `
+                    <div class="message-content">${message.content}</div>
+                    <div class="message-info">
+                        <span>${isSent ? 'You' : (message.senderName || 'User')} • ${time}</span>
+                    </div>
+                `;
+                messagesContainer.appendChild(messageDiv);
+            }
+        };
+
+        // Send message
+        window.sendMessage = async function() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+            
+            if (!content || !currentChatId || !currentChatType || !currentUser) {
+                return;
+            }
+            
+            try {
+                // Get user data
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                const userData = userDoc.data();
+                
+                // Create message
+                const messageData = {
+                    content: content,
+                    senderId: currentUser.uid,
+                    senderName: userData?.name || currentUser.email.split('@')[0],
+                    timestamp: serverTimestamp(),
+                    type: 'text'
+                };
+                
+                // Add message
+                await addDoc(collection(db, currentChatType, currentChatId, 'messages'), messageData);
+                
+                // Update chat timestamp
+                await updateDoc(doc(db, currentChatType, currentChatId), {
+                    updatedAt: serverTimestamp()
+                });
+                
+                // Clear input
+                input.value = '';
+                input.focus();
+                
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Error sending message: ' + error.message);
+            }
+        };
+
+        // Close chat
+        window.closeChat = function() {
+            // Remove listeners
+            if (messageListener) {
+                messageListener();
+                messageListener = null;
+            }
+            
+            // Reset
+            currentChatId = null;
+            currentChatType = null;
+            currentChatData = null;
+            
+            // Hide chat, show main app
+            document.getElementById('chatInterface').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'flex';
+            
+            // Clear message input
+            document.getElementById('messageInput').value = '';
+            
+            // Refresh lists
+            loadMyRooms();
+            loadMyGroups();
+        };
+
+        // Update profile - FIXED VERSION
+        window.updateProfile = async function() {
+            if (!currentUser) return;
+            
+            const displayName = document.getElementById('displayName').value.trim();
+            const imageFile = document.getElementById('profileImage').files[0];
+            
+            if (!displayName) {
+                alert('Please enter a display name');
+                return;
+            }
+            
+            try {
+                let profileImageUrl = null;
+                
+                // Handle image upload if file selected
+                if (imageFile) {
+                    console.log("Uploading profile image...");
+                    
+                    // Delete old image if exists
+                    const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                    const userData = userDoc.data();
+                    
+                    if (userData?.profileImage) {
+                        try {
+                            // Extract the path from the URL
+                            const oldImagePath = userData.profileImage;
+                            const oldImageRef = ref(storage, oldImagePath);
+                            await deleteObject(oldImageRef);
+                            console.log("Deleted old profile image");
+                        } catch (error) {
+                            console.error("Error deleting old image:", error);
+                            // Continue anyway
+                        }
+                    }
+                    
+                    // Upload new image
+                    const storageRef = ref(storage, `profile-images/${currentUser.uid}_${Date.now()}.jpg`);
+                    await uploadBytes(storageRef, imageFile);
+                    profileImageUrl = await getDownloadURL(storageRef);
+                    console.log("Profile image uploaded:", profileImageUrl);
+                }
+                
+                // Update user document
+                const updates = {
+                    name: displayName,
+                    updatedAt: serverTimestamp()
+                };
+                
+                if (profileImageUrl) {
+                    updates.profileImage = profileImageUrl;
+                }
+                
+                await updateDoc(doc(db, 'users', currentUser.uid), updates);
+                console.log("User document updated");
+                
+                // Update auth profile
+                if (displayName !== currentUser.displayName) {
+                    await updateAuthProfile(currentUser, {
+                        displayName: displayName
+                    });
+                    console.log("Auth profile updated");
+                }
+                
+                // Update UI
+                updateUserUI({ 
+                    name: displayName, 
+                    profileImage: profileImageUrl || (await getDoc(doc(db, 'users', currentUser.uid))).data()?.profileImage 
+                });
+                
+                alert('Profile updated successfully!');
+                
+                // Reset file input
+                document.getElementById('profileImage').value = '';
+                profileImageFile = null;
+                
+                // Show home page
+                showPage('home');
+                
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Error updating profile: ' + error.message);
+            }
+        };
+
+        // Show chat settings
+        window.showChatSettings = function() {
+            if (!currentChatData || !currentChatId || !currentChatType) return;
+            
+            // Check if user is admin
+            if (currentChatData.admin !== currentUser.uid) {
+                alert('Only admin can change settings');
+                return;
+            }
+            
+            // Populate settings
+            document.getElementById('memberLimit').value = currentChatData.maxMembers;
+            
+            // Show modal
+            document.getElementById('settingsModal').style.display = 'flex';
+        };
+
+        // Close settings
+        window.closeSettings = function() {
+            document.getElementById('settingsModal').style.display = 'none';
+        };
+
+        // Save settings
+        window.saveSettings = async function() {
+            if (!currentChatId || !currentChatType) return;
+            
+            const memberLimit = parseInt(document.getElementById('memberLimit').value);
+            
+            if (memberLimit < 2) {
+                alert('Member limit must be at least 2');
+                return;
+            }
+            
+            try {
+                await updateDoc(doc(db, currentChatType, currentChatId), {
+                    maxMembers: memberLimit,
+                    updatedAt: serverTimestamp()
+                });
+                
+                alert('Settings saved successfully!');
+                closeSettings();
+                
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                alert('Error saving settings: ' + error.message);
+            }
+        };
+    </script>
+</body>
+</html>
