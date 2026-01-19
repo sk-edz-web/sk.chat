@@ -10,24 +10,29 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         :root {
             --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --success: #4cc9f0;
+            --primary-dark: #3a0ca3;
+            --secondary: #4cc9f0;
             --danger: #f72585;
             --warning: #f8961e;
+            --success: #4ade80;
             --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
+            --dark: #1a1a1a;
+            --gray: #64748b;
+            --light-gray: #f1f5f9;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         body {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            color: var(--dark);
         }
 
         .app-container {
@@ -50,31 +55,34 @@
         .auth-header {
             text-align: center;
             margin-top: 40px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .auth-logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 20px;
-            margin: 0 auto 20px;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 25px;
+            margin: 0 auto 25px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 32px;
+            font-size: 40px;
+            box-shadow: var(--shadow-lg);
         }
 
         .auth-header h1 {
             color: var(--dark);
-            font-size: 28px;
-            margin-bottom: 8px;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
         .auth-header p {
             color: var(--gray);
-            font-size: 14px;
+            font-size: 15px;
+            line-height: 1.5;
         }
 
         .auth-tabs {
@@ -82,12 +90,12 @@
             background: var(--light-gray);
             border-radius: 15px;
             padding: 5px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .auth-tab {
             flex: 1;
-            padding: 15px;
+            padding: 16px;
             border: none;
             background: transparent;
             color: var(--gray);
@@ -95,13 +103,13 @@
             font-size: 16px;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
 
         .auth-tab.active {
             background: white;
             color: var(--primary);
-            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
+            box-shadow: var(--shadow);
         }
 
         .auth-form {
@@ -118,18 +126,19 @@
             display: block;
             margin-bottom: 8px;
             color: var(--dark);
-            font-weight: 500;
+            font-weight: 600;
             font-size: 14px;
         }
 
         .form-input {
             width: 100%;
             padding: 16px;
-            border: 2px solid var(--light-gray);
+            border: 2px solid var(--border);
             border-radius: 12px;
             font-size: 16px;
             transition: all 0.3s;
             background: white;
+            color: var(--dark);
         }
 
         .form-input:focus {
@@ -138,30 +147,48 @@
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
         }
 
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
         .auth-btn {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s ease;
             margin-top: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
         .auth-btn:active {
-            transform: scale(0.98);
+            transform: translateY(0);
         }
 
         .error-message {
             background: #fee;
             color: var(--danger);
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 15px;
+            padding: 14px;
+            border-radius: 10px;
+            margin-top: 20px;
             font-size: 14px;
             display: none;
             border-left: 4px solid var(--danger);
@@ -172,23 +199,25 @@
             display: none;
             flex-direction: column;
             height: 100vh;
+            background: var(--light);
         }
 
         /* Header */
         .header {
-            padding: 15px 20px;
+            padding: 16px 20px;
             background: white;
-            border-bottom: 1px solid var(--light-gray);
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: var(--shadow);
         }
 
         .header-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--dark);
         }
@@ -196,6 +225,7 @@
         .header-actions {
             display: flex;
             gap: 15px;
+            align-items: center;
         }
 
         .header-btn {
@@ -206,10 +236,11 @@
             cursor: pointer;
             padding: 8px;
             border-radius: 10px;
+            transition: all 0.3s;
         }
 
-        .header-btn:active {
-            background: rgba(67, 97, 238, 0.1);
+        .header-btn:hover {
+            background: var(--light-gray);
         }
 
         /* Content Area */
@@ -223,35 +254,35 @@
 
         /* Home Page */
         .welcome-card {
-            background: white;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             border-radius: 20px;
             padding: 25px;
             margin-bottom: 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            color: white;
+            box-shadow: var(--shadow-lg);
         }
 
         .user-info {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 20px;
         }
 
         .user-avatar {
             width: 70px;
             height: 70px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 28px;
             font-weight: bold;
-            border: 3px solid white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 3px solid rgba(255, 255, 255, 0.3);
             overflow: hidden;
             position: relative;
+            flex-shrink: 0;
         }
 
         .user-avatar img {
@@ -268,13 +299,13 @@
         }
 
         .user-details h3 {
-            font-size: 20px;
-            color: var(--dark);
+            font-size: 22px;
             margin-bottom: 5px;
+            font-weight: 700;
         }
 
         .user-details p {
-            color: var(--gray);
+            opacity: 0.9;
             font-size: 14px;
         }
 
@@ -282,7 +313,6 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            margin-top: 20px;
         }
 
         .action-card {
@@ -290,33 +320,39 @@
             border-radius: 15px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--light-gray);
-            transition: transform 0.3s;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
             cursor: pointer;
         }
 
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
         .action-card:active {
-            transform: scale(0.98);
+            transform: translateY(0);
         }
 
         .action-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 15px;
             margin: 0 auto 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 24px;
+            font-size: 26px;
         }
 
         .action-card h4 {
             color: var(--dark);
             margin-bottom: 5px;
             font-size: 16px;
+            font-weight: 600;
         }
 
         .action-card p {
@@ -339,19 +375,21 @@
             border-radius: 20px;
             padding: 25px;
             margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow);
         }
 
         .form-card h2 {
             color: var(--dark);
-            margin-bottom: 15px;
-            font-size: 22px;
+            margin-bottom: 10px;
+            font-size: 24px;
+            font-weight: 700;
         }
 
         .form-card p {
             color: var(--gray);
             margin-bottom: 25px;
             font-size: 14px;
+            line-height: 1.5;
         }
 
         .radio-group {
@@ -372,7 +410,7 @@
             border-radius: 12px;
             text-align: center;
             color: var(--gray);
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -398,19 +436,37 @@
         }
 
         .file-upload label {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             padding: 20px;
-            border: 2px dashed var(--light-gray);
+            border: 2px dashed var(--border);
             border-radius: 12px;
-            text-align: center;
             color: var(--gray);
             cursor: pointer;
             transition: all 0.3s;
+            background: var(--light-gray);
         }
 
         .file-upload label:hover {
             border-color: var(--primary);
             background: rgba(67, 97, 238, 0.05);
+        }
+
+        .image-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px auto;
+            display: none;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* Lists */
@@ -423,19 +479,25 @@
             background: white;
             border-radius: 15px;
             padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--light-gray);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 15px;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .room-card:hover, .group-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-lg);
         }
 
         .room-avatar, .group-avatar {
             width: 60px;
             height: 60px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -457,18 +519,27 @@
 
         .room-info, .group-info {
             flex: 1;
+            min-width: 0;
         }
 
         .room-info h3, .group-info h3 {
             color: var(--dark);
             margin-bottom: 5px;
             font-size: 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .room-info p, .group-info p {
             color: var(--gray);
             font-size: 12px;
             margin-bottom: 8px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .room-meta, .group-meta {
@@ -481,19 +552,39 @@
         .primary-btn {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .secondary-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--light-gray);
+            color: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
             margin-top: 10px;
         }
 
-        .primary-btn:active {
-            transform: scale(0.98);
+        .secondary-btn:hover {
+            background: var(--border);
         }
 
         /* Chat Interface */
@@ -511,12 +602,13 @@
         }
 
         .chat-header {
-            padding: 15px 20px;
+            padding: 16px 20px;
             background: white;
-            border-bottom: 1px solid var(--light-gray);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 15px;
+            box-shadow: var(--shadow);
         }
 
         .back-btn {
@@ -526,13 +618,19 @@
             color: var(--primary);
             cursor: pointer;
             padding: 8px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--light-gray);
         }
 
         .chat-avatar {
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -541,6 +639,7 @@
             font-weight: bold;
             overflow: hidden;
             position: relative;
+            flex-shrink: 0;
         }
 
         .chat-avatar img {
@@ -554,33 +653,80 @@
 
         .chat-title {
             flex: 1;
+            min-width: 0;
         }
 
         .chat-title h3 {
             color: var(--dark);
             font-size: 18px;
             margin-bottom: 2px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .chat-title p {
             color: var(--gray);
             font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
         }
 
         .chat-messages {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
-            background: #f8f9fa;
+            background: var(--light);
+            display: flex;
+            flex-direction: column;
         }
 
         .message {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             max-width: 80%;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
         }
 
         .message.sent {
             margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 600;
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .message-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         .message-content {
@@ -590,18 +736,23 @@
             color: white;
             font-size: 15px;
             line-height: 1.4;
+            word-wrap: break-word;
+            max-width: 100%;
         }
 
         .message.received .message-content {
             background: white;
             color: var(--dark);
-            border: 1px solid var(--light-gray);
+            border: 1px solid var(--border);
         }
 
         .message-info {
             font-size: 11px;
             color: var(--gray);
             margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
             padding: 0 8px;
         }
 
@@ -610,13 +761,16 @@
             color: var(--gray);
             font-size: 13px;
             font-style: italic;
-            margin: 10px 0;
+            margin: 15px 0;
+            padding: 8px;
+            background: var(--light-gray);
+            border-radius: 10px;
         }
 
         .chat-input {
-            padding: 15px 20px;
+            padding: 16px 20px;
             background: white;
-            border-top: 1px solid var(--light-gray);
+            border-top: 1px solid var(--border);
             display: flex;
             gap: 10px;
             align-items: center;
@@ -625,20 +779,23 @@
         .chat-input input {
             flex: 1;
             padding: 12px 16px;
-            border: 2px solid var(--light-gray);
+            border: 2px solid var(--border);
             border-radius: 25px;
             font-size: 15px;
+            background: var(--light);
+            color: var(--dark);
         }
 
         .chat-input input:focus {
             border-color: var(--primary);
             outline: none;
+            background: white;
         }
 
         .send-btn {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
             border-radius: 50%;
@@ -647,6 +804,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
         }
 
         /* Settings Page */
@@ -655,16 +822,21 @@
             border-radius: 20px;
             overflow: hidden;
             margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow);
         }
 
         .settings-item {
             padding: 20px;
-            border-bottom: 1px solid var(--light-gray);
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .settings-item:hover {
+            background: var(--light-gray);
         }
 
         .settings-item:last-child {
@@ -693,6 +865,7 @@
             color: var(--dark);
             font-size: 16px;
             margin-bottom: 2px;
+            font-weight: 600;
         }
 
         .settings-item p {
@@ -718,6 +891,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            animation: fadeIn 0.3s ease;
         }
 
         .modal-content {
@@ -725,7 +899,7 @@
             border-radius: 20px;
             padding: 25px;
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
             max-height: 80vh;
             overflow-y: auto;
             animation: slideUp 0.3s ease;
@@ -740,7 +914,8 @@
 
         .modal-header h2 {
             color: var(--dark);
-            font-size: 20px;
+            font-size: 24px;
+            font-weight: 700;
         }
 
         .close-btn {
@@ -750,70 +925,130 @@
             color: var(--gray);
             cursor: pointer;
             padding: 5px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            background: var(--light-gray);
+            color: var(--danger);
         }
 
         .members-list {
             max-height: 300px;
             overflow-y: auto;
             margin: 20px 0;
+            display: grid;
+            gap: 10px;
         }
 
         .member-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 15px;
+            gap: 12px;
+            padding: 12px;
             background: var(--light);
             border-radius: 12px;
-            margin-bottom: 10px;
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 600;
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .member-info {
+            flex: 1;
+            min-width: 0;
         }
 
         .member-info h4 {
             color: var(--dark);
             font-size: 14px;
             margin-bottom: 2px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .member-info p {
             color: var(--gray);
-            font-size: 12px;
-        }
-
-        .member-actions {
+            font-size: 11px;
             display: flex;
-            gap: 8px;
+            align-items: center;
+            gap: 5px;
         }
 
-        .admin-btn, .kick-btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .admin-btn {
+        .admin-badge {
             background: var(--primary);
             color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
         }
 
-        .kick-btn {
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .danger-btn {
             background: var(--danger);
             color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .danger-btn:hover {
+            background: #e11571;
         }
 
         /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             color: var(--gray);
         }
 
         .empty-icon {
-            font-size: 48px;
+            font-size: 60px;
             color: var(--light-gray);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: 600;
         }
 
         /* Navigation */
@@ -823,11 +1058,12 @@
             left: 0;
             right: 0;
             background: white;
-            border-top: 1px solid var(--light-gray);
+            border-top: 1px solid var(--border);
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
+            padding: 12px 0;
             z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .nav-item {
@@ -843,13 +1079,29 @@
         }
 
         .nav-item i {
-            font-size: 20px;
+            font-size: 22px;
             margin-bottom: 4px;
         }
 
         .nav-item.active {
             color: var(--primary);
             background: rgba(67, 97, 238, 0.1);
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
         }
 
         /* Animations */
@@ -871,7 +1123,7 @@
 
         /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 5px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
@@ -881,6 +1133,18 @@
         ::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 10px;
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -893,7 +1157,7 @@
                     <i class="fas fa-comments"></i>
                 </div>
                 <h1>Secure Chat</h1>
-                <p>Private and secure messaging</p>
+                <p>Private and secure messaging with end-to-end encryption</p>
             </div>
 
             <div class="auth-tabs">
@@ -909,7 +1173,10 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Password</label>
-                        <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required>
+                        <div class="input-with-icon">
+                            <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required>
+                            <i class="fas fa-lock input-icon"></i>
+                        </div>
                     </div>
                     <button class="auth-btn" onclick="login()">Login</button>
                 </div>
@@ -925,11 +1192,17 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Password</label>
-                        <input type="password" id="signupPassword" class="form-input" placeholder="Create a password" required minlength="6">
+                        <div class="input-with-icon">
+                            <input type="password" id="signupPassword" class="form-input" placeholder="Create a password (min 6 chars)" required minlength="6">
+                            <i class="fas fa-lock input-icon"></i>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Confirm Password</label>
-                        <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+                        <div class="input-with-icon">
+                            <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+                            <i class="fas fa-lock input-icon"></i>
+                        </div>
                     </div>
                     <button class="auth-btn" onclick="signup()">Create Account</button>
                 </div>
@@ -988,6 +1261,13 @@
                             <h4>Create Group</h4>
                             <p>Permanent group chat</p>
                         </div>
+                        <div class="action-card" onclick="showPage('joinGroup')">
+                            <div class="action-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <h4>Join Group</h4>
+                            <p>Join existing group</p>
+                        </div>
                         <div class="action-card" onclick="showPage('myGroups')">
                             <div class="action-icon">
                                 <i class="fas fa-user-friends"></i>
@@ -1002,13 +1282,6 @@
                             <h4>My Rooms</h4>
                             <p>Your chat rooms</p>
                         </div>
-                        <div class="action-card" onclick="showPage('settings')">
-                            <div class="action-icon">
-                                <i class="fas fa-cog"></i>
-                            </div>
-                            <h4>Settings</h4>
-                            <p>Account & preferences</p>
-                        </div>
                     </div>
                 </div>
 
@@ -1016,7 +1289,7 @@
                 <div id="createRoomPage" class="page-container">
                     <div class="form-card">
                         <h2>Create New Room</h2>
-                        <p>Create a private or public chat room</p>
+                        <p>Create a private or public chat room for temporary conversations</p>
                         
                         <div class="form-group">
                             <label class="form-label">Room Name</label>
@@ -1041,7 +1314,10 @@
                         
                         <div class="form-group" id="roomPasswordGroup">
                             <label class="form-label">Room Password</label>
-                            <input type="password" id="roomPassword" class="form-input" placeholder="Enter password (required for private rooms)">
+                            <div class="input-with-icon">
+                                <input type="password" id="roomPassword" class="form-input" placeholder="Enter password (required for private rooms)">
+                                <i class="fas fa-key input-icon"></i>
+                            </div>
                         </div>
                         
                         <button class="primary-btn" onclick="createRoom()">Create Room</button>
@@ -1052,7 +1328,7 @@
                 <div id="joinRoomPage" class="page-container">
                     <div class="form-card">
                         <h2>Join Room</h2>
-                        <p>Enter room ID or name to join</p>
+                        <p>Enter room ID or name to join an existing room</p>
                         
                         <div class="form-group">
                             <label class="form-label">Room ID or Name</label>
@@ -1061,7 +1337,10 @@
                         
                         <div class="form-group">
                             <label class="form-label">Password</label>
-                            <input type="password" id="joinRoomPassword" class="form-input" placeholder="Enter room password">
+                            <div class="input-with-icon">
+                                <input type="password" id="joinRoomPassword" class="form-input" placeholder="Enter room password (if required)">
+                                <i class="fas fa-key input-icon"></i>
+                            </div>
                         </div>
                         
                         <button class="primary-btn" onclick="joinRoom()">Join Room</button>
@@ -1072,7 +1351,7 @@
                 <div id="createGroupPage" class="page-container">
                     <div class="form-card">
                         <h2>Create New Group</h2>
-                        <p>Create a group for permanent messaging</p>
+                        <p>Create a permanent group for continuous messaging</p>
                         
                         <div class="form-group">
                             <label class="form-label">Group Name</label>
@@ -1080,10 +1359,15 @@
                         </div>
                         
                         <div class="form-group file-upload">
-                            <input type="file" id="groupImage" accept="image/*">
+                            <input type="file" id="groupImage" accept="image/*" onchange="previewGroupImage()">
                             <label for="groupImage">
-                                <i class="fas fa-cloud-upload-alt"></i> Upload Group Image
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Upload Group Image</span>
                             </label>
+                        </div>
+                        
+                        <div class="image-preview" id="groupImagePreview">
+                            <img id="groupImagePreviewImg" src="" alt="Group Image Preview">
                         </div>
                         
                         <div class="form-group">
@@ -1092,11 +1376,37 @@
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">Password</label>
-                            <input type="password" id="groupPassword" class="form-input" placeholder="Enter group password" required>
+                            <label class="form-label">Group Password</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="groupPassword" class="form-input" placeholder="Enter group password" required>
+                                <i class="fas fa-key input-icon"></i>
+                            </div>
                         </div>
                         
                         <button class="primary-btn" onclick="createGroup()">Create Group</button>
+                    </div>
+                </div>
+
+                <!-- Join Group Page -->
+                <div id="joinGroupPage" class="page-container">
+                    <div class="form-card">
+                        <h2>Join Group</h2>
+                        <p>Enter group ID and password to join an existing group</p>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Group ID</label>
+                            <input type="text" id="joinGroupId" class="form-input" placeholder="Enter group ID" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Group Password</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="joinGroupPassword" class="form-input" placeholder="Enter group password" required>
+                                <i class="fas fa-key input-icon"></i>
+                            </div>
+                        </div>
+                        
+                        <button class="primary-btn" onclick="joinGroup()">Join Group</button>
                     </div>
                 </div>
 
@@ -1126,21 +1436,29 @@
                 <div id="settingsPage" class="page-container">
                     <div class="form-card">
                         <h2>Profile Settings</h2>
-                        <p>Update your profile information</p>
+                        <p>Update your profile information and preferences</p>
                         
                         <div class="form-group file-upload">
                             <input type="file" id="profileImage" accept="image/*" onchange="previewProfileImage()">
                             <label for="profileImage">
-                                <i class="fas fa-camera"></i> Change Profile Picture
+                                <i class="fas fa-camera"></i>
+                                <span>Change Profile Picture</span>
                             </label>
+                        </div>
+                        
+                        <div class="image-preview" id="profileImagePreview">
+                            <img id="profileImagePreviewImg" src="" alt="Profile Preview">
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">Display Name</label>
-                            <input type="text" id="displayName" class="form-input" placeholder="Enter your name">
+                            <input type="text" id="displayName" class="form-input" placeholder="Enter your name" required>
                         </div>
                         
                         <button class="primary-btn" onclick="updateProfile()">Update Profile</button>
+                        <button class="secondary-btn" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1152,7 +1470,7 @@
                     <span>Home</span>
                 </a>
                 <a href="#" class="nav-item" onclick="showPage('myRooms')">
-                    <i class="fas fa-home"></i>
+                    <i class="fas fa-comments"></i>
                     <span>Rooms</span>
                 </a>
                 <a href="#" class="nav-item" onclick="showPage('myGroups')">
@@ -1177,10 +1495,10 @@
                 </div>
                 <div class="chat-title">
                     <h3 id="chatTitle">Room Name</h3>
-                    <p id="chatInfo">0 members online</p>
+                    <p id="chatInfo"><span class="online-dot"></span> 0 members online</p>
                 </div>
                 <button class="header-btn" onclick="showChatSettings()">
-                    <i class="fas fa-cog"></i>
+                    <i class="fas fa-ellipsis-v"></i>
                 </button>
             </div>
             <div class="chat-messages" id="chatMessages">
@@ -1194,22 +1512,45 @@
             </div>
         </div>
 
-        <!-- Settings Modal -->
-        <div class="modal" id="settingsModal">
+        <!-- Room Settings Modal -->
+        <div class="modal" id="roomSettingsModal">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2>Room Settings</h2>
-                    <button class="close-btn" onclick="closeSettings()">&times;</button>
+                    <button class="close-btn" onclick="closeRoomSettings()">&times;</button>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Member Limit</label>
-                    <input type="number" id="memberLimit" class="form-input" min="2" max="1000">
-                </div>
-                <h3>Members</h3>
-                <div class="members-list" id="membersList">
+                
+                <h3 style="margin-bottom: 15px;">Members (<span id="memberCount">0</span>)</h3>
+                <div class="members-list" id="roomMembersList">
                     <!-- Members will be loaded here -->
                 </div>
-                <button class="primary-btn" onclick="saveSettings()">Save Changes</button>
+                
+                <div class="modal-actions">
+                    <button class="danger-btn" onclick="closeRoom()">
+                        <i class="fas fa-times"></i> Close Room
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Group Settings Modal -->
+        <div class="modal" id="groupSettingsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Group Settings</h2>
+                    <button class="close-btn" onclick="closeGroupSettings()">&times;</button>
+                </div>
+                
+                <h3 style="margin-bottom: 15px;">Members (<span id="groupMemberCount">0</span>)</h3>
+                <div class="members-list" id="groupMembersList">
+                    <!-- Members will be loaded here -->
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="danger-btn" onclick="leaveGroup()">
+                        <i class="fas fa-sign-out-alt"></i> Leave Group
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -1236,6 +1577,7 @@
             query, 
             where, 
             updateDoc, 
+            deleteDoc,
             arrayUnion, 
             arrayRemove,
             serverTimestamp,
@@ -1251,7 +1593,7 @@
             deleteObject
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-        // Firebase configuration - UPDATED WITH YOUR CONFIG
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCoqnPMnB13cTNSfJWkPsvr4_RFUWEVoWI",
             authDomain: "sk-pvt-chat.firebaseapp.com",
@@ -1275,6 +1617,7 @@
         let currentChatData = null;
         let messageListener = null;
         let profileImageFile = null;
+        let groupImageFile = null;
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
@@ -1285,7 +1628,6 @@
                     console.log("User authenticated:", user.email);
                     await loadUserData();
                     showMainApp();
-                    // Load rooms and groups after a short delay to ensure user data is loaded
                     setTimeout(() => {
                         loadMyRooms();
                         loadMyGroups();
@@ -1442,7 +1784,7 @@
             document.getElementById('chatInterface').style.display = 'none';
         }
 
-        // Load user data - FIXED VERSION
+        // Load user data
         async function loadUserData() {
             if (!auth.currentUser) {
                 console.log("No current user found");
@@ -1453,12 +1795,10 @@
             console.log("Loading data for user:", currentUser.uid);
             
             try {
-                // Get user document from Firestore
                 const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
                 
                 if (!userDoc.exists()) {
                     console.log("User document doesn't exist, creating...");
-                    // Create user document if it doesn't exist
                     await setDoc(doc(db, 'users', currentUser.uid), {
                         name: currentUser.displayName || currentUser.email.split('@')[0],
                         email: currentUser.email,
@@ -1469,7 +1809,6 @@
                         lastSeen: serverTimestamp()
                     });
                     
-                    // Reload the document
                     const newUserDoc = await getDoc(doc(db, 'users', currentUser.uid));
                     updateUserUI(newUserDoc.data());
                 } else {
@@ -1478,75 +1817,75 @@
                 }
             } catch (error) {
                 console.error('Error loading user data:', error);
-                // Show default user info as fallback
                 document.getElementById('userName').textContent = currentUser.email.split('@')[0];
                 document.getElementById('userEmail').textContent = currentUser.email;
                 document.getElementById('avatarText').textContent = currentUser.email.charAt(0).toUpperCase();
             }
         }
 
-        // Update user UI - FIXED VERSION
+        // Update user UI
         function updateUserUI(userData) {
             console.log("Updating UI with user data:", userData);
             
-            // Use the name from Firestore, not from auth
             const userName = userData?.name || currentUser.email.split('@')[0];
             const userEmail = currentUser.email;
             const profileImage = userData?.profileImage || '';
             
-            // Update all user elements
             document.getElementById('userName').textContent = userName;
             document.getElementById('userEmail').textContent = userEmail;
             
-            // Update display name field if exists
             const displayNameInput = document.getElementById('displayName');
             if (displayNameInput) {
                 displayNameInput.value = userName;
             }
             
-            // Update avatar
             const avatarElement = document.getElementById('userAvatar');
             const avatarText = document.getElementById('avatarText');
             
             if (profileImage) {
-                // Remove existing image if any
                 const existingImg = avatarElement.querySelector('img');
                 if (existingImg) existingImg.remove();
                 
-                // Create and add new image
                 const img = document.createElement('img');
                 img.src = profileImage;
                 img.alt = userName;
                 avatarElement.appendChild(img);
                 avatarText.style.display = 'none';
+                
+                // Update preview
+                const preview = document.getElementById('profileImagePreviewImg');
+                if (preview) {
+                    preview.src = profileImage;
+                    document.getElementById('profileImagePreview').style.display = 'block';
+                }
             } else {
-                // Remove existing image if any
                 const existingImg = avatarElement.querySelector('img');
                 if (existingImg) existingImg.remove();
                 
-                // Show text
                 avatarText.textContent = userName.charAt(0).toUpperCase();
                 avatarText.style.display = 'flex';
             }
         }
 
-        // Preview profile image before upload
+        // Preview profile image
         window.previewProfileImage = function() {
             const file = document.getElementById('profileImage').files[0];
             if (file) {
                 profileImageFile = file;
                 
-                // Create preview
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    const preview = document.getElementById('profileImagePreviewImg');
+                    preview.src = e.target.result;
+                    document.getElementById('profileImagePreview').style.display = 'block';
+                    
+                    // Update main avatar preview
                     const avatarElement = document.getElementById('userAvatar');
                     const avatarText = document.getElementById('avatarText');
                     
-                    // Remove existing image if any
                     const existingImg = avatarElement.querySelector('img');
                     if (existingImg) existingImg.remove();
                     
-                    // Create and add preview image
                     const img = document.createElement('img');
                     img.src = e.target.result;
                     img.alt = "Profile preview";
@@ -1557,14 +1896,30 @@
             }
         };
 
+        // Preview group image
+        window.previewGroupImage = function() {
+            const file = document.getElementById('groupImage').files[0];
+            if (file) {
+                groupImageFile = file;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('groupImagePreviewImg');
+                    preview.src = e.target.result;
+                    document.getElementById('groupImagePreview').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        };
+
         // Show page
         window.showPage = function(pageName) {
-            // Update page title
             const pageTitles = {
                 'home': 'Home',
                 'createRoom': 'Create Room',
                 'joinRoom': 'Join Room',
                 'createGroup': 'Create Group',
+                'joinGroup': 'Join Group',
                 'myGroups': 'My Groups',
                 'myRooms': 'My Rooms',
                 'settings': 'Settings'
@@ -1572,20 +1927,16 @@
             
             document.getElementById('pageTitle').textContent = pageTitles[pageName] || 'Home';
             
-            // Hide all pages
             document.querySelectorAll('.page-container').forEach(page => {
                 page.classList.remove('active');
             });
             
-            // Show selected page
             document.getElementById(pageName + 'Page').classList.add('active');
             
-            // Update bottom nav active state
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            // Set active based on page
             if (pageName === 'home') {
                 document.querySelector('.nav-item:nth-child(1)').classList.add('active');
             } else if (pageName === 'myRooms') {
@@ -1598,7 +1949,6 @@
                 document.querySelector('.nav-item:nth-child(4)').classList.add('active');
             }
             
-            // Load data for specific pages
             if (pageName === 'createRoom') {
                 toggleRoomPassword();
             }
@@ -1620,14 +1970,13 @@
             }
         };
 
-        // Create room - FIXED to open chat directly
+        // Create room
         window.createRoom = async function() {
             const name = document.getElementById('roomName').value.trim();
             const maxMembers = parseInt(document.getElementById('roomMembers').value);
             const password = document.getElementById('roomPassword').value;
             const isPrivate = document.getElementById('privateRoom').checked;
             
-            // Validation
             if (!name) {
                 alert('Please enter room name');
                 return;
@@ -1639,7 +1988,6 @@
             }
             
             try {
-                // Check if room name exists
                 const roomsRef = collection(db, 'rooms');
                 const q = query(roomsRef, where('name', '==', name));
                 const snapshot = await getDocs(q);
@@ -1649,11 +1997,9 @@
                     return;
                 }
                 
-                // Get user data
                 const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
                 const userData = userDoc.data();
                 
-                // Create room
                 const roomId = 'room_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 const roomData = {
                     name: name,
@@ -1665,21 +2011,19 @@
                     members: [currentUser.uid],
                     createdAt: serverTimestamp(),
                     updatedAt: serverTimestamp(),
-                    imageUrl: ''
+                    imageUrl: '',
+                    isActive: true
                 };
                 
                 await setDoc(doc(db, 'rooms', roomId), roomData);
                 
-                // Add to user's rooms
                 await updateDoc(doc(db, 'users', currentUser.uid), {
                     rooms: arrayUnion(roomId)
                 });
                 
-                // Clear form
                 document.getElementById('roomName').value = '';
                 document.getElementById('roomPassword').value = '';
                 
-                // Show success and OPEN CHAT DIRECTLY
                 console.log('Room created, opening chat:', roomId);
                 await enterRoom(roomId);
                 
@@ -1689,7 +2033,7 @@
             }
         };
 
-        // Join room - FIXED to open chat directly
+        // Join room
         window.joinRoom = async function() {
             const roomIdOrName = document.getElementById('joinRoomId').value.trim();
             const password = document.getElementById('joinRoomPassword').value;
@@ -1730,9 +2074,14 @@
                     roomData = snapshot.docs[0].data();
                 }
                 
+                // Check if room is active
+                if (!roomData.isActive) {
+                    alert('This room has been closed by the admin');
+                    return;
+                }
+                
                 // Check if already member
                 if (roomData.members.includes(currentUser.uid)) {
-                    // Already a member, just open the room
                     console.log('Already member, opening chat:', roomId);
                     await enterRoom(roomId);
                     return;
@@ -1750,22 +2099,18 @@
                     return;
                 }
                 
-                // Get user data
                 const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
                 const userData = userDoc.data();
                 
-                // Add user to room
                 await updateDoc(doc(db, 'rooms', roomId), {
                     members: arrayUnion(currentUser.uid),
                     updatedAt: serverTimestamp()
                 });
                 
-                // Add room to user's rooms
                 await updateDoc(doc(db, 'users', currentUser.uid), {
                     rooms: arrayUnion(roomId)
                 });
                 
-                // Add join message
                 await addDoc(collection(db, 'rooms', roomId, 'messages'), {
                     type: 'system',
                     content: `${userData?.name || 'User'} joined the room`,
@@ -1774,11 +2119,9 @@
                     timestamp: serverTimestamp()
                 });
                 
-                // Clear form
                 document.getElementById('joinRoomId').value = '';
                 document.getElementById('joinRoomPassword').value = '';
                 
-                // OPEN CHAT DIRECTLY
                 console.log('Joined room, opening chat:', roomId);
                 await enterRoom(roomId);
                 
@@ -1788,14 +2131,12 @@
             }
         };
 
-        // Create group - FIXED to open chat directly
+        // Create group - FIXED VERSION
         window.createGroup = async function() {
             const name = document.getElementById('groupName').value.trim();
             const maxMembers = parseInt(document.getElementById('groupMembers').value);
             const password = document.getElementById('groupPassword').value;
-            const imageFile = document.getElementById('groupImage').files[0];
             
-            // Validation
             if (!name || !password) {
                 alert('Please fill all required fields');
                 return;
@@ -1810,17 +2151,17 @@
                 let imageUrl = '';
                 
                 // Upload image if provided
-                if (imageFile) {
-                    const storageRef = ref(storage, `groups/${currentUser.uid}_${Date.now()}_${imageFile.name}`);
-                    await uploadBytes(storageRef, imageFile);
+                if (groupImageFile) {
+                    console.log("Uploading group image...");
+                    const storageRef = ref(storage, `groups/${currentUser.uid}_${Date.now()}_${groupImageFile.name}`);
+                    await uploadBytes(storageRef, groupImageFile);
                     imageUrl = await getDownloadURL(storageRef);
+                    console.log("Group image uploaded:", imageUrl);
                 }
                 
-                // Get user data
                 const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
                 const userData = userDoc.data();
                 
-                // Create group
                 const groupId = 'group_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 const groupData = {
                     name: name,
@@ -1831,12 +2172,12 @@
                     members: [currentUser.uid],
                     createdAt: serverTimestamp(),
                     updatedAt: serverTimestamp(),
-                    imageUrl: imageUrl
+                    imageUrl: imageUrl,
+                    isActive: true
                 };
                 
                 await setDoc(doc(db, 'groups', groupId), groupData);
                 
-                // Add to user's groups
                 await updateDoc(doc(db, 'users', currentUser.uid), {
                     groups: arrayUnion(groupId)
                 });
@@ -1845,14 +2186,91 @@
                 document.getElementById('groupName').value = '';
                 document.getElementById('groupPassword').value = '';
                 document.getElementById('groupImage').value = '';
+                document.getElementById('groupImagePreview').style.display = 'none';
+                groupImageFile = null;
                 
-                // Show success and OPEN CHAT DIRECTLY
                 console.log('Group created, opening chat:', groupId);
                 await enterGroup(groupId);
                 
             } catch (error) {
                 console.error('Error creating group:', error);
                 alert('Error creating group: ' + error.message);
+            }
+        };
+
+        // Join group
+        window.joinGroup = async function() {
+            const groupId = document.getElementById('joinGroupId').value.trim();
+            const password = document.getElementById('joinGroupPassword').value;
+            
+            if (!groupId || !password) {
+                alert('Please enter group ID and password');
+                return;
+            }
+            
+            try {
+                const groupDoc = await getDoc(doc(db, 'groups', groupId));
+                
+                if (!groupDoc.exists()) {
+                    alert('Group not found');
+                    return;
+                }
+                
+                const groupData = groupDoc.data();
+                
+                if (!groupData.isActive) {
+                    alert('This group has been closed by the admin');
+                    return;
+                }
+                
+                // Check if already member
+                if (groupData.members.includes(currentUser.uid)) {
+                    console.log('Already member, opening chat:', groupId);
+                    await enterGroup(groupId);
+                    return;
+                }
+                
+                // Check password
+                if (groupData.password !== password) {
+                    alert('Incorrect password');
+                    return;
+                }
+                
+                // Check member limit
+                if (groupData.members.length >= groupData.maxMembers) {
+                    alert('Group is full');
+                    return;
+                }
+                
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                const userData = userDoc.data();
+                
+                await updateDoc(doc(db, 'groups', groupId), {
+                    members: arrayUnion(currentUser.uid),
+                    updatedAt: serverTimestamp()
+                });
+                
+                await updateDoc(doc(db, 'users', currentUser.uid), {
+                    groups: arrayUnion(groupId)
+                });
+                
+                await addDoc(collection(db, 'groups', groupId, 'messages'), {
+                    type: 'system',
+                    content: `${userData?.name || 'User'} joined the group`,
+                    senderId: currentUser.uid,
+                    senderName: userData?.name || 'User',
+                    timestamp: serverTimestamp()
+                });
+                
+                document.getElementById('joinGroupId').value = '';
+                document.getElementById('joinGroupPassword').value = '';
+                
+                console.log('Joined group, opening chat:', groupId);
+                await enterGroup(groupId);
+                
+            } catch (error) {
+                console.error('Error joining group:', error);
+                alert('Error joining group: ' + error.message);
             }
         };
 
@@ -1882,12 +2300,14 @@
                 
                 roomsList.innerHTML = '';
                 
-                // Load room data for each room ID
                 for (const roomId of roomIds) {
                     try {
                         const roomDoc = await getDoc(doc(db, 'rooms', roomId));
                         if (roomDoc.exists()) {
                             const roomData = roomDoc.data();
+                            
+                            // Skip if room is closed
+                            if (!roomData.isActive) continue;
                             
                             const roomCard = document.createElement('div');
                             roomCard.className = 'room-card';
@@ -1920,6 +2340,19 @@
                     } catch (error) {
                         console.error('Error loading room:', roomId, error);
                     }
+                }
+                
+                // Check if list is empty after filtering closed rooms
+                if (roomsList.children.length === 0) {
+                    roomsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-door-closed"></i>
+                            </div>
+                            <h3>No Active Rooms</h3>
+                            <p>All your rooms are closed or expired</p>
+                        </div>
+                    `;
                 }
                 
             } catch (error) {
@@ -1962,12 +2395,14 @@
                 
                 groupsList.innerHTML = '';
                 
-                // Load group data for each group ID
                 for (const groupId of groupIds) {
                     try {
                         const groupDoc = await getDoc(doc(db, 'groups', groupId));
                         if (groupDoc.exists()) {
                             const groupData = groupDoc.data();
+                            
+                            // Skip if group is closed
+                            if (!groupData.isActive) continue;
                             
                             const groupCard = document.createElement('div');
                             groupCard.className = 'group-card';
@@ -1999,6 +2434,19 @@
                     } catch (error) {
                         console.error('Error loading group:', groupId, error);
                     }
+                }
+                
+                // Check if list is empty after filtering closed groups
+                if (groupsList.children.length === 0) {
+                    groupsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-users-slash"></i>
+                            </div>
+                            <h3>No Active Groups</h3>
+                            <p>All your groups are closed</p>
+                        </div>
+                    `;
                 }
                 
             } catch (error) {
@@ -2033,13 +2481,12 @@
             }
         };
 
-        // Enter room - FIXED
+        // Enter room
         async function enterRoom(roomId) {
             try {
                 currentChatId = roomId;
                 currentChatType = 'rooms';
                 
-                // Load room data
                 const roomDoc = await getDoc(doc(db, 'rooms', roomId));
                 currentChatData = roomDoc.data();
                 
@@ -2047,40 +2494,37 @@
                     throw new Error('Room not found');
                 }
                 
-                // Update chat UI
+                if (!currentChatData.isActive) {
+                    alert('This room has been closed');
+                    return;
+                }
+                
                 document.getElementById('chatTitle').textContent = currentChatData.name;
                 document.getElementById('chatInfo').textContent = `${currentChatData.members?.length || 0} members • ${currentChatData.isPrivate ? 'Private' : 'Public'}`;
                 
-                // Set chat avatar
                 const chatAvatar = document.getElementById('chatAvatar');
                 const chatAvatarText = document.getElementById('chatAvatarText');
                 
                 if (currentChatData.imageUrl) {
-                    // Remove existing image if any
                     const existingImg = chatAvatar.querySelector('img');
                     if (existingImg) existingImg.remove();
                     
-                    // Add image
                     const img = document.createElement('img');
                     img.src = currentChatData.imageUrl;
                     img.alt = currentChatData.name;
                     chatAvatar.appendChild(img);
                     chatAvatarText.style.display = 'none';
                 } else {
-                    // Remove existing image if any
                     const existingImg = chatAvatar.querySelector('img');
                     if (existingImg) existingImg.remove();
                     
-                    // Show text
                     chatAvatarText.textContent = currentChatData.name.charAt(0).toUpperCase();
                     chatAvatarText.style.display = 'flex';
                 }
                 
-                // Show chat interface
                 document.getElementById('mainContainer').style.display = 'none';
                 document.getElementById('chatInterface').style.display = 'flex';
                 
-                // Load messages
                 loadMessages();
                 
             } catch (error) {
@@ -2089,13 +2533,12 @@
             }
         };
 
-        // Enter group - FIXED
+        // Enter group
         async function enterGroup(groupId) {
             try {
                 currentChatId = groupId;
                 currentChatType = 'groups';
                 
-                // Load group data
                 const groupDoc = await getDoc(doc(db, 'groups', groupId));
                 currentChatData = groupDoc.data();
                 
@@ -2103,40 +2546,37 @@
                     throw new Error('Group not found');
                 }
                 
-                // Update chat UI
+                if (!currentChatData.isActive) {
+                    alert('This group has been closed');
+                    return;
+                }
+                
                 document.getElementById('chatTitle').textContent = currentChatData.name;
                 document.getElementById('chatInfo').textContent = `${currentChatData.members?.length || 0} members • Group`;
                 
-                // Set chat avatar
                 const chatAvatar = document.getElementById('chatAvatar');
                 const chatAvatarText = document.getElementById('chatAvatarText');
                 
                 if (currentChatData.imageUrl) {
-                    // Remove existing image if any
                     const existingImg = chatAvatar.querySelector('img');
                     if (existingImg) existingImg.remove();
                     
-                    // Add image
                     const img = document.createElement('img');
                     img.src = currentChatData.imageUrl;
                     img.alt = currentChatData.name;
                     chatAvatar.appendChild(img);
                     chatAvatarText.style.display = 'none';
                 } else {
-                    // Remove existing image if any
                     const existingImg = chatAvatar.querySelector('img');
                     if (existingImg) existingImg.remove();
                     
-                    // Show text
                     chatAvatarText.textContent = currentChatData.name.charAt(0).toUpperCase();
                     chatAvatarText.style.display = 'flex';
                 }
                 
-                // Show chat interface
                 document.getElementById('mainContainer').style.display = 'none';
                 document.getElementById('chatInterface').style.display = 'flex';
                 
-                // Load messages
                 loadMessages();
                 
             } catch (error) {
@@ -2145,19 +2585,17 @@
             }
         };
 
-        // Load messages
+        // Load messages with profile images
         function loadMessages() {
             if (!currentChatId || !currentChatType) return;
             
-            // Clear previous listener
             if (messageListener) {
                 messageListener();
             }
             
             const messagesContainer = document.getElementById('chatMessages');
-            messagesContainer.innerHTML = '<div class="spinner" style="margin: 20px auto;"></div>';
+            messagesContainer.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Loading messages...</h3></div>';
             
-            // Setup real-time listener for messages
             const messagesRef = collection(db, currentChatType, currentChatId, 'messages');
             const q = query(messagesRef, orderBy('timestamp', 'asc'));
             
@@ -2182,15 +2620,14 @@
                     displayMessage(message);
                 });
                 
-                // Scroll to bottom
                 setTimeout(() => {
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
                 }, 100);
             });
         };
 
-        // Display message
-        function displayMessage(message) {
+        // Display message with profile images
+        async function displayMessage(message) {
             const messagesContainer = document.getElementById('chatMessages');
             
             if (message.type === 'system') {
@@ -2207,12 +2644,46 @@
                     message.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 
                     'Just now';
                 
+                // Get sender's profile image
+                let senderImage = '';
+                let senderName = message.senderName || 'User';
+                let avatarText = senderName.charAt(0).toUpperCase();
+                
+                try {
+                    const senderDoc = await getDoc(doc(db, 'users', message.senderId));
+                    if (senderDoc.exists()) {
+                        const senderData = senderDoc.data();
+                        senderImage = senderData.profileImage || '';
+                        senderName = senderData.name || senderName;
+                        avatarText = senderName.charAt(0).toUpperCase();
+                    }
+                } catch (error) {
+                    console.error('Error loading sender data:', error);
+                }
+                
                 messageDiv.innerHTML = `
-                    <div class="message-content">${message.content}</div>
-                    <div class="message-info">
-                        <span>${isSent ? 'You' : (message.senderName || 'User')} • ${time}</span>
+                    ${!isSent ? `
+                        <div class="message-avatar">
+                            ${senderImage ? 
+                                `<img src="${senderImage}" alt="${senderName}">` : 
+                                avatarText}
+                        </div>
+                    ` : ''}
+                    <div>
+                        <div class="message-content">${message.content}</div>
+                        <div class="message-info">
+                            <span>${isSent ? 'You' : senderName} • ${time}</span>
+                        </div>
                     </div>
+                    ${isSent ? `
+                        <div class="message-avatar">
+                            ${senderImage ? 
+                                `<img src="${senderImage}" alt="${senderName}">` : 
+                                avatarText}
+                        </div>
+                    ` : ''}
                 `;
+                
                 messagesContainer.appendChild(messageDiv);
             }
         };
@@ -2227,11 +2698,9 @@
             }
             
             try {
-                // Get user data
                 const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
                 const userData = userDoc.data();
                 
-                // Create message
                 const messageData = {
                     content: content,
                     senderId: currentUser.uid,
@@ -2240,15 +2709,12 @@
                     type: 'text'
                 };
                 
-                // Add message
                 await addDoc(collection(db, currentChatType, currentChatId, 'messages'), messageData);
                 
-                // Update chat timestamp
                 await updateDoc(doc(db, currentChatType, currentChatId), {
                     updatedAt: serverTimestamp()
                 });
                 
-                // Clear input
                 input.value = '';
                 input.focus();
                 
@@ -2260,30 +2726,241 @@
 
         // Close chat
         window.closeChat = function() {
-            // Remove listeners
             if (messageListener) {
                 messageListener();
                 messageListener = null;
             }
             
-            // Reset
             currentChatId = null;
             currentChatType = null;
             currentChatData = null;
             
-            // Hide chat, show main app
             document.getElementById('chatInterface').style.display = 'none';
             document.getElementById('mainContainer').style.display = 'flex';
             
-            // Clear message input
             document.getElementById('messageInput').value = '';
             
-            // Refresh lists
             loadMyRooms();
             loadMyGroups();
         };
 
-        // Update profile - FIXED VERSION
+        // Show chat settings
+        window.showChatSettings = async function() {
+            if (!currentChatData || !currentChatId || !currentChatType) return;
+            
+            try {
+                if (currentChatType === 'rooms') {
+                    await loadRoomMembers();
+                    document.getElementById('roomSettingsModal').style.display = 'flex';
+                } else if (currentChatType === 'groups') {
+                    await loadGroupMembers();
+                    document.getElementById('groupSettingsModal').style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+                alert('Error loading settings: ' + error.message);
+            }
+        };
+
+        // Load room members
+        async function loadRoomMembers() {
+            const membersList = document.getElementById('roomMembersList');
+            membersList.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Loading members...</h3></div>';
+            
+            const memberIds = currentChatData.members || [];
+            document.getElementById('memberCount').textContent = memberIds.length;
+            
+            if (memberIds.length === 0) {
+                membersList.innerHTML = '<div class="empty-state"><h3>No members</h3></div>';
+                return;
+            }
+            
+            membersList.innerHTML = '';
+            
+            for (const memberId of memberIds) {
+                try {
+                    const userDoc = await getDoc(doc(db, 'users', memberId));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        const isAdmin = currentChatData.admin === memberId;
+                        
+                        const memberItem = document.createElement('div');
+                        memberItem.className = 'member-item';
+                        
+                        memberItem.innerHTML = `
+                            <div class="member-avatar">
+                                ${userData.profileImage ? 
+                                    `<img src="${userData.profileImage}" alt="${userData.name}">` : 
+                                    userData.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div class="member-info">
+                                <h4>${userData.name}</h4>
+                                <p>
+                                    ${isAdmin ? '<span class="admin-badge">Admin</span>' : ''}
+                                    <span>${userData.email}</span>
+                                </p>
+                            </div>
+                        `;
+                        
+                        membersList.appendChild(memberItem);
+                    }
+                } catch (error) {
+                    console.error('Error loading member:', memberId, error);
+                }
+            }
+        };
+
+        // Load group members
+        async function loadGroupMembers() {
+            const membersList = document.getElementById('groupMembersList');
+            membersList.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Loading members...</h3></div>';
+            
+            const memberIds = currentChatData.members || [];
+            document.getElementById('groupMemberCount').textContent = memberIds.length;
+            
+            if (memberIds.length === 0) {
+                membersList.innerHTML = '<div class="empty-state"><h3>No members</h3></div>';
+                return;
+            }
+            
+            membersList.innerHTML = '';
+            
+            for (const memberId of memberIds) {
+                try {
+                    const userDoc = await getDoc(doc(db, 'users', memberId));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        const isAdmin = currentChatData.admin === memberId;
+                        
+                        const memberItem = document.createElement('div');
+                        memberItem.className = 'member-item';
+                        
+                        memberItem.innerHTML = `
+                            <div class="member-avatar">
+                                ${userData.profileImage ? 
+                                    `<img src="${userData.profileImage}" alt="${userData.name}">` : 
+                                    userData.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div class="member-info">
+                                <h4>${userData.name}</h4>
+                                <p>
+                                    ${isAdmin ? '<span class="admin-badge">Admin</span>' : ''}
+                                    <span>${userData.email}</span>
+                                </p>
+                            </div>
+                        `;
+                        
+                        membersList.appendChild(memberItem);
+                    }
+                } catch (error) {
+                    console.error('Error loading member:', memberId, error);
+                }
+            }
+        };
+
+        // Close room settings
+        window.closeRoomSettings = function() {
+            document.getElementById('roomSettingsModal').style.display = 'none';
+        };
+
+        // Close group settings
+        window.closeGroupSettings = function() {
+            document.getElementById('groupSettingsModal').style.display = 'none';
+        };
+
+        // Close room (admin only)
+        window.closeRoom = async function() {
+            if (!currentChatId || currentChatType !== 'rooms' || !currentChatData) {
+                return;
+            }
+            
+            if (currentChatData.admin !== currentUser.uid) {
+                alert('Only admin can close the room');
+                return;
+            }
+            
+            if (!confirm('Are you sure you want to close this room? This action cannot be undone.')) {
+                return;
+            }
+            
+            try {
+                await updateDoc(doc(db, 'rooms', currentChatId), {
+                    isActive: false,
+                    updatedAt: serverTimestamp()
+                });
+                
+                // Add system message
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                const userData = userDoc.data();
+                
+                await addDoc(collection(db, 'rooms', currentChatId, 'messages'), {
+                    type: 'system',
+                    content: `${userData?.name || 'Admin'} closed the room`,
+                    senderId: currentUser.uid,
+                    senderName: userData?.name || 'Admin',
+                    timestamp: serverTimestamp()
+                });
+                
+                alert('Room closed successfully');
+                closeRoomSettings();
+                closeChat();
+                
+            } catch (error) {
+                console.error('Error closing room:', error);
+                alert('Error closing room: ' + error.message);
+            }
+        };
+
+        // Leave group
+        window.leaveGroup = async function() {
+            if (!currentChatId || currentChatType !== 'groups' || !currentChatData) {
+                return;
+            }
+            
+            if (currentChatData.admin === currentUser.uid) {
+                alert('Admin cannot leave the group. Please close the group instead or transfer admin rights.');
+                return;
+            }
+            
+            if (!confirm('Are you sure you want to leave this group?')) {
+                return;
+            }
+            
+            try {
+                // Remove user from group members
+                await updateDoc(doc(db, 'groups', currentChatId), {
+                    members: arrayRemove(currentUser.uid),
+                    updatedAt: serverTimestamp()
+                });
+                
+                // Remove group from user's groups
+                await updateDoc(doc(db, 'users', currentUser.uid), {
+                    groups: arrayRemove(currentChatId)
+                });
+                
+                // Add system message
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                const userData = userDoc.data();
+                
+                await addDoc(collection(db, 'groups', currentChatId, 'messages'), {
+                    type: 'system',
+                    content: `${userData?.name || 'User'} left the group`,
+                    senderId: currentUser.uid,
+                    senderName: userData?.name || 'User',
+                    timestamp: serverTimestamp()
+                });
+                
+                alert('Left group successfully');
+                closeGroupSettings();
+                closeChat();
+                
+            } catch (error) {
+                console.error('Error leaving group:', error);
+                alert('Error leaving group: ' + error.message);
+            }
+        };
+
+        // Update profile
         window.updateProfile = async function() {
             if (!currentUser) return;
             
@@ -2298,35 +2975,29 @@
             try {
                 let profileImageUrl = null;
                 
-                // Handle image upload if file selected
                 if (imageFile) {
                     console.log("Uploading profile image...");
                     
-                    // Delete old image if exists
                     const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
                     const userData = userDoc.data();
                     
                     if (userData?.profileImage) {
                         try {
-                            // Extract the path from the URL
                             const oldImagePath = userData.profileImage;
                             const oldImageRef = ref(storage, oldImagePath);
                             await deleteObject(oldImageRef);
                             console.log("Deleted old profile image");
                         } catch (error) {
                             console.error("Error deleting old image:", error);
-                            // Continue anyway
                         }
                     }
                     
-                    // Upload new image
                     const storageRef = ref(storage, `profile-images/${currentUser.uid}_${Date.now()}.jpg`);
                     await uploadBytes(storageRef, imageFile);
                     profileImageUrl = await getDownloadURL(storageRef);
                     console.log("Profile image uploaded:", profileImageUrl);
                 }
                 
-                // Update user document
                 const updates = {
                     name: displayName,
                     updatedAt: serverTimestamp()
@@ -2339,7 +3010,6 @@
                 await updateDoc(doc(db, 'users', currentUser.uid), updates);
                 console.log("User document updated");
                 
-                // Update auth profile
                 if (displayName !== currentUser.displayName) {
                     await updateAuthProfile(currentUser, {
                         displayName: displayName
@@ -2347,7 +3017,6 @@
                     console.log("Auth profile updated");
                 }
                 
-                // Update UI
                 updateUserUI({ 
                     name: displayName, 
                     profileImage: profileImageUrl || (await getDoc(doc(db, 'users', currentUser.uid))).data()?.profileImage 
@@ -2355,64 +3024,15 @@
                 
                 alert('Profile updated successfully!');
                 
-                // Reset file input
                 document.getElementById('profileImage').value = '';
+                document.getElementById('profileImagePreview').style.display = 'none';
                 profileImageFile = null;
                 
-                // Show home page
                 showPage('home');
                 
             } catch (error) {
                 console.error('Error updating profile:', error);
                 alert('Error updating profile: ' + error.message);
-            }
-        };
-
-        // Show chat settings
-        window.showChatSettings = function() {
-            if (!currentChatData || !currentChatId || !currentChatType) return;
-            
-            // Check if user is admin
-            if (currentChatData.admin !== currentUser.uid) {
-                alert('Only admin can change settings');
-                return;
-            }
-            
-            // Populate settings
-            document.getElementById('memberLimit').value = currentChatData.maxMembers;
-            
-            // Show modal
-            document.getElementById('settingsModal').style.display = 'flex';
-        };
-
-        // Close settings
-        window.closeSettings = function() {
-            document.getElementById('settingsModal').style.display = 'none';
-        };
-
-        // Save settings
-        window.saveSettings = async function() {
-            if (!currentChatId || !currentChatType) return;
-            
-            const memberLimit = parseInt(document.getElementById('memberLimit').value);
-            
-            if (memberLimit < 2) {
-                alert('Member limit must be at least 2');
-                return;
-            }
-            
-            try {
-                await updateDoc(doc(db, currentChatType, currentChatId), {
-                    maxMembers: memberLimit,
-                    updatedAt: serverTimestamp()
-                });
-                
-                alert('Settings saved successfully!');
-                closeSettings();
-                
-            } catch (error) {
-                console.error('Error saving settings:', error);
-                alert('Error saving settings: ' + error.message);
             }
         };
     </script>
